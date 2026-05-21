@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorium — Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:      #1c1408;
+    --parchment:#f4edd8;
+    --warm:     #ece2c4;
+    --cream:    #faf5e8;
+    --border:   #d0bfa0;
+    --gold:     #b8832e;
+    --forest:   #2a5224;
+    --muted:    #8a7a5a;
+    --shadow:   rgba(28,20,8,0.18);
+    --wood:     #140a04;
+    --wood-mid: #1e0e06;
+    --wood-lt:  #2c1608;
+    --brass:    #9a7228;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family:'Andika', sans-serif;
+    background:var(--wood);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex; flex-direction:column;
+  }
+
+  body::after {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:900;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  /* ── HEADER ── */
+  header {
+    background:var(--ink);
+    padding:13px 32px 10px;
+    display:flex; align-items:center; justify-content:space-between;
+    position:relative; flex-shrink:0; z-index:100;
+  }
+  header::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,#1a3a14,#3a7a2a,#1a3a14);
+  }
+  .logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
+  .logo-seal {
+    width:34px; height:34px; border-radius:50%;
+    background:var(--forest);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 0 2px rgba(42,82,36,0.4); flex-shrink:0;
+  }
+  .logo-seal svg { width:18px; height:18px; }
+  .logo-name {
+    font-family:'Playfair Display', serif;
+    font-size:1.3rem; font-weight:900; color:var(--parchment);
+  }
+  .logo-name em { color:#6aaa5a; font-style:normal; }
+  .logo-sub {
+    display:block; font-family:'JetBrains Mono', monospace;
+    font-size:0.52rem; color:#3a4a30;
+    letter-spacing:0.16em; text-transform:uppercase; margin-top:1px;
+  }
+  .breadcrumb {
+    display:flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase;
+  }
+  .breadcrumb a { color:#4a6a3a; text-decoration:none; }
+  .breadcrumb a:hover { color:#6aaa5a; }
+  .breadcrumb .sep { color:#2a4020; }
+  .breadcrumb .cur { color:#6aaa5a; }
+  .back-btn {
+    display:flex; align-items:center; gap:6px;
+    background:rgba(42,82,36,0.2); border:1px solid rgba(42,82,36,0.4);
+    border-radius:3px; padding:5px 12px;
+    font-size:0.72rem; color:#6aaa5a;
+    text-decoration:none; transition:background 0.2s;
+  }
+  .back-btn:hover { background:rgba(42,82,36,0.35); }
+
+  /* ── LIB TITLE ── */
+  .lib-title {
+    background:linear-gradient(180deg,var(--wood-lt),var(--wood-mid));
+    border-bottom:2px solid #080402;
+    padding:14px 32px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .lib-title h1 {
+    font-family:'Playfair Display', serif;
+    font-size:1.1rem; font-weight:900; color:var(--parchment);
+  }
+  .lib-title p { font-size:0.73rem; font-style:italic; color:#5a3a18; margin-top:2px; }
+
+  /* ── SHELVES ── */
+  .shelves-wrap {
+    flex:1; padding:28px 32px 48px;
+    display:flex; flex-direction:column; gap:32px;
+    overflow-y:auto;
+  }
+
+  .genre-header {
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px; padding-bottom:8px;
+    border-bottom:1px solid #2a1208;
+  }
+  .genre-badge {
+    background:var(--brass); color:#140802;
+    font-family:'Playfair Display', serif;
+    font-size:0.8rem; font-weight:700;
+    padding:4px 14px; border-radius:3px;
+    letter-spacing:0.04em;
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+  }
+  .genre-count {
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.56rem; color:#5a3818; letter-spacing:0.1em;
+  }
+
+  /* ── COVERS ── */
+  .covers-grid { display:flex; flex-wrap:wrap; gap:18px; }
+
+  .book-card {
+    width:100px; cursor:pointer;
+    display:flex; flex-direction:column; gap:7px;
+    transition:transform 0.2s ease;
+  }
+  .book-card:hover { transform:translateY(-7px); }
+  .book-card:hover .cover-wrap { box-shadow:0 14px 32px rgba(0,0,0,0.65); }
+
+  .cover-wrap {
+    width:100px; height:140px;
+    border-radius:2px 5px 5px 2px;
+    overflow:hidden; position:relative;
+    box-shadow:3px 4px 14px rgba(0,0,0,0.55), inset -3px 0 8px rgba(0,0,0,0.25);
+    transition:box-shadow 0.2s; flex-shrink:0;
+  }
+  .cover-wrap::before {
+    content:''; position:absolute;
+    left:0; top:0; bottom:0; width:8px;
+    background:linear-gradient(90deg,rgba(0,0,0,0.45),transparent);
+    z-index:2;
+  }
+  .cover-img { width:100%; height:100%; object-fit:cover; display:block; }
+
+  .cover-ph {
+    width:100%; height:100%;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:10px 8px; gap:5px;
+    background:linear-gradient(160deg, var(--c-lt,#6a3a18), var(--c,#3a1a08));
+  }
+  .cover-ph .ph-icon  { font-size:1.8rem; }
+  .cover-ph .ph-title {
+    font-family:'Playfair Display', serif;
+    font-size:0.6rem; font-weight:700;
+    color:rgba(255,255,255,0.9);
+    text-align:center; line-height:1.25;
+    text-shadow:0 1px 3px rgba(0,0,0,0.5);
+  }
+  .cover-ph .ph-author {
+    font-size:0.5rem; color:rgba(255,255,255,0.5);
+    text-align:center; font-style:italic;
+  }
+  .cover-ph .ph-hint {
+    position:absolute; bottom:4px; right:4px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.4rem; color:rgba(255,255,255,0.28);
+    background:rgba(0,0,0,0.3); border-radius:2px; padding:1px 4px; z-index:3;
+  }
+
+  .book-label {
+    font-family:'Playfair Display', serif;
+    font-size:0.65rem; font-weight:700;
+    color:var(--parchment); line-height:1.25; text-align:center;
+  }
+
+  /* ── LOADING ── */
+  .loading-msg {
+    position:fixed; inset:0; z-index:800;
+    background:rgba(6,3,1,0.9);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:14px;
+    opacity:0; pointer-events:none; transition:opacity 0.2s;
+  }
+  .loading-msg.show { opacity:1; pointer-events:all; }
+  .loading-msg p { font-family:'Playfair Display', serif; font-size:1rem; color:var(--parchment); font-style:italic; }
+  .spinner {
+    width:32px; height:32px; border-radius:50%;
+    border:2px solid rgba(184,131,46,0.2);
+    border-top-color:var(--gold);
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* ── READING OVERLAY ── */
+  .overlay {
+    position:fixed; inset:0; z-index:500;
+    background:rgba(6,3,1,0.93);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.3s; padding:24px;
+  }
+  .overlay.open { opacity:1; pointer-events:all; }
+
+  .open-book {
+    display:flex;
+    width:min(860px,92vw);
+    height:min(570px,84vh);
+    box-shadow:0 24px 70px rgba(0,0,0,0.85);
+    border-radius:3px 8px 8px 3px;
+    transform:scaleX(0); transform-origin:left center;
+    transition:transform 0.45s cubic-bezier(0.34,1.2,0.64,1);
+    position:relative;
+  }
+  .open-book.opened { transform:scaleX(1); }
+
+  .close-btn {
+    position:absolute; top:-16px; right:-16px;
+    width:36px; height:36px;
+    background:var(--ink); border:2px solid #4a3820;
+    border-radius:50%; color:var(--parchment);
+    font-size:1rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    z-index:10; box-shadow:0 3px 10px rgba(0,0,0,0.5);
+    transition:background 0.2s;
+  }
+  .close-btn:hover { background:#3a2010; }
+
+  .page-l, .page-r {
+    flex:1; padding:32px 32px 52px;
+    display:flex; flex-direction:column;
+    position:relative; overflow:hidden;
+  }
+  .page-l {
+    background:linear-gradient(108deg,#ede4cc 0%,#faf5e8 50%,#f5eedc 100%);
+    border-right:2px solid #d4c4a0;
+    border-radius:3px 0 0 3px;
+    box-shadow:inset -6px 0 16px rgba(0,0,0,0.06);
+  }
+  .page-r {
+    background:linear-gradient(72deg,#faf5e8 0%,#f5eedc 60%,#ece2c4 100%);
+    border-radius:0 8px 8px 0;
+  }
+  .page-l::after {
+    content:''; position:absolute; right:0; top:0; bottom:0; width:20px;
+    background:linear-gradient(90deg,transparent,rgba(0,0,0,0.05));
+  }
+  .page-r::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:20px;
+    background:linear-gradient(90deg,rgba(0,0,0,0.05),transparent);
+  }
+
+  /* title page */
+  .title-pg {
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    height:100%; gap:12px; text-align:center;
+  }
+  .title-pg .t-cover {
+    width:80px; height:112px; border-radius:2px 4px 4px 2px;
+    object-fit:cover; box-shadow:3px 4px 14px rgba(0,0,0,0.28);
+  }
+  .title-pg .t-cover-ph {
+    width:80px; height:112px; border-radius:2px 4px 4px 2px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:2.4rem; box-shadow:3px 4px 14px rgba(0,0,0,0.28);
+  }
+  .title-pg h2 {
+    font-family:'Playfair Display', serif;
+    font-size:1.5rem; font-weight:900; color:var(--ink); line-height:1.2;
+  }
+  .title-pg .t-author { font-size:0.85rem; color:var(--muted); font-style:italic; }
+  .title-pg .t-start {
+    margin-top:8px;
+    background:var(--forest); color:white;
+    border:none; border-radius:4px; padding:7px 18px;
+    font-family:'Andika', sans-serif; font-size:0.78rem;
+    cursor:pointer; transition:opacity 0.2s;
+  }
+  .title-pg .t-start:hover { opacity:0.85; }
+
+  /* reading text */
+  .page-num {
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.56rem; color:#c0a870;
+    letter-spacing:0.1em; margin-bottom:10px; text-align:center;
+  }
+  .page-text {
+    font-family:'Playfair Display', serif;
+    font-size:0.94rem; line-height:1.9;
+    color:#2a2010; flex:1; overflow:hidden;
+  }
+  .page-text p { margin-bottom:0.85em; }
+  .page-text p:first-child::first-letter {
+    font-size:3.2em; line-height:0.72;
+    float:left; margin:4px 7px 0 0;
+    color:var(--forest); font-weight:900; font-style:normal;
+  }
+
+  /* controls */
+  .page-controls {
+    position:absolute; bottom:14px; left:0; right:0;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 22px;
+  }
+  .pg-btn {
+    background:none; border:1px solid #d0bfa0;
+    border-radius:3px; padding:5px 13px;
+    font-family:'Andika', sans-serif;
+    font-size:0.72rem; color:#8a7a5a;
+    cursor:pointer; transition:all 0.18s;
+  }
+  .pg-btn:hover:not(:disabled) { background:var(--forest); color:white; border-color:var(--forest); }
+  .pg-btn:disabled { opacity:0.2; cursor:not-allowed; }
+  .pg-ind {
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.58rem; color:#c0a870; letter-spacing:0.08em;
+  }
+
+  @keyframes pturn {
+    0%  { opacity:1; transform:scaleX(1); }
+    40% { opacity:0.5; transform:scaleX(0.97); }
+    100%{ opacity:1; transform:scaleX(1); }
+  }
+  .turning { animation:pturn 0.22s ease; }
+
+  @keyframes up {
+    from { opacity:0; transform:translateY(12px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .genre-section { animation:up 0.4s ease both; }
+  .genre-section:nth-child(1){animation-delay:.05s}
+  .genre-section:nth-child(2){animation-delay:.12s}
+  .genre-section:nth-child(3){animation-delay:.19s}
+  .genre-section:nth-child(4){animation-delay:.26s}
+  .genre-section:nth-child(5){animation-delay:.33s}
+  .genre-section:nth-child(6){animation-delay:.40s}
+
+  @media(max-width:640px){
+    .shelves-wrap { padding:16px; }
+    .open-book { flex-direction:column; height:auto; border-radius:6px; }
+    .page-l { border-right:none; border-bottom:2px solid #d4c4a0; border-radius:6px 6px 0 0; }
+    .page-r { border-radius:0 0 6px 6px; }
+    header { padding:11px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="explorium.html">
+    <div class="logo-seal">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M19 4C19 4 13 6 9 12C7 15 6.5 18 6.5 18L8.5 16C8.5 16 9.5 19 7.5 21C7.5 21 13 20 16 14C19 8 19 4 19 4Z" fill="#f4edd8"/>
+        <path d="M6.5 18L4 21" stroke="#f4edd8" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-name">Explor<em>ium</em></div>
+      <span class="logo-sub">Knowledge Portal</span>
+    </div>
+  </a>
+  <div class="breadcrumb">
+    <a href="explorium.html">Home</a>
+    <span class="sep">›</span>
+    <span class="cur">Library</span>
+  </div>
+  <a class="back-btn" href="explorium.html">← Back</a>
+</header>
+
+<div class="lib-title">
+  <span style="font-size:1.5rem">📚</span>
+  <div>
+    <h1>The Library</h1>
+    <p>Click any cover to open and read · Add image files to replace placeholders</p>
+  </div>
+</div>
+
+<div class="shelves-wrap" id="shelvesWrap"></div>
+
+<div class="loading-msg" id="loadingMsg">
+  <div class="spinner"></div>
+  <p>Opening book…</p>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="open-book" id="openBook">
+    <button class="close-btn" onclick="closeBook()">✕</button>
+    <div class="page-l" id="pageL"></div>
+    <div class="page-r" id="pageR"></div>
+  </div>
+</div>
+
+<script>
+/*
+==========================================================
+  BOOK CATALOGUE
+  How to add a book:
+  1. Download plain text from gutenberg.org → save to books/
+  2. Download cover image from openlibrary.org → save to images/covers/
+  3. Add an entry below pointing to those files
+  Leave img:'' if you haven't got the cover image yet —
+  a coloured placeholder will show instead.
+==========================================================
+*/
+
+const WORDS_PER_PAGE = 180;
+
+const genres = [
+  { name:'Adventure', icon:'⚔️', books:[
+    { title:'Treasure Island',              author:'R. L. Stevenson',  icon:'🏴‍☠️', img:'images/covers/treasure-island.jpg',       file:'books/treasure-island.txt',       bg:'#6b2d0e', bglt:'#9a4a1a' },
+    { title:'Robinson Crusoe',              author:'Daniel Defoe',     icon:'🏝️',  img:'images/covers/robinson-crusoe.jpg',        file:'books/robinson-crusoe.txt',       bg:'#1e4a18', bglt:'#2e6a24' },
+    { title:'20,000 Leagues Under the Sea', author:'Jules Verne',      icon:'🐙',  img:'images/covers/20000-leagues.jpg',          file:'books/20000-leagues.txt',         bg:'#18285a', bglt:'#243878' },
+    { title:'Swiss Family Robinson',        author:'Johann Wyss',      icon:'🌴',  img:'images/covers/swiss-family-robinson.jpg',  file:'books/swiss-family-robinson.txt', bg:'#4a2808', bglt:'#6a3a10' },
+    { title:'The Call of the Wild',         author:'Jack London',      icon:'🐺',  img:'images/covers/call-of-the-wild.jpg',       file:'books/call-of-the-wild.txt',      bg:'#1a1a2a', bglt:'#2a2a3a' },
+  ]},
+  { name:'Fairy Tales', icon:'✨', books:[
+    { title:'Alice in Wonderland',          author:'Lewis Carroll',    icon:'🐇',  img:'images/covers/alice-in-wonderland.jpg',    file:'books/alice-in-wonderland.txt',   bg:'#5a1870', bglt:'#7a2890' },
+    { title:"Grimm's Fairy Tales",          author:'Brothers Grimm',   icon:'🐺',  img:'images/covers/grimms-fairy-tales.jpg',     file:'books/grimms-fairy-tales.txt',    bg:'#4a1010', bglt:'#6a1818' },
+    { title:"Aesop's Fables",               author:'Aesop',            icon:'🦊',  img:'images/covers/aesops-fables.jpg',          file:'books/aesops-fables.txt',         bg:'#145050', bglt:'#1e6a6a' },
+    { title:'The Arabian Nights',           author:'Traditional',      icon:'🌙',  img:'images/covers/arabian-nights.jpg',         file:'books/arabian-nights.txt',        bg:'#3a2808', bglt:'#5a3c10' },
+  ]},
+  { name:'Animals', icon:'🦁', books:[
+    { title:'The Jungle Book',              author:'Rudyard Kipling',  icon:'🐆',  img:'images/covers/jungle-book.jpg',            file:'books/jungle-book.txt',           bg:'#1e4a14', bglt:'#2a6018' },
+    { title:'Black Beauty',                 author:'Anna Sewell',      icon:'🐎',  img:'images/covers/black-beauty.jpg',           file:'books/black-beauty.txt',          bg:'#1a1a1a', bglt:'#2e2e2e' },
+    { title:'The Wind in the Willows',      author:'Kenneth Grahame',  icon:'🐸',  img:'images/covers/wind-in-the-willows.jpg',    file:'books/wind-in-the-willows.txt',   bg:'#1e4a14', bglt:'#2a5a18' },
+    { title:'Watership Down',               author:'Richard Adams',    icon:'🐇',  img:'images/covers/watership-down.jpg',         file:'books/watership-down.txt',        bg:'#4a2808', bglt:'#6a3810' },
+  ]},
+  { name:'History', icon:'🏛️', books:[
+    { title:'Tales of Ancient Egypt',       author:'Roger L. Green',   icon:'🐪',  img:'images/covers/tales-ancient-egypt.jpg',   file:'books/tales-ancient-egypt.txt',   bg:'#8a5a08', bglt:'#aa7818' },
+    { title:'Stories of King Arthur',       author:'Howard Pyle',      icon:'👑',  img:'images/covers/king-arthur.jpg',           file:'books/king-arthur.txt',           bg:'#18285a', bglt:'#243070' },
+    { title:'The Iliad Retold',             author:'Alfred J. Church', icon:'⚔️',  img:'images/covers/the-iliad.jpg',             file:'books/the-iliad.txt',             bg:'#7a1818', bglt:'#982222' },
+  ]},
+  { name:'Science', icon:'🔬', books:[
+    { title:'The Wonders of the Universe',  author:'Explorium Press',  icon:'🚀',  img:'images/covers/wonders-universe.jpg',      file:'books/wonders-universe.txt',      bg:'#0a0a2a', bglt:'#14143a' },
+    { title:'How Things Work',              author:'Explorium Press',  icon:'⚙️',  img:'images/covers/how-things-work.jpg',       file:'books/how-things-work.txt',       bg:'#1a2a3a', bglt:'#243444' },
+    { title:'The Story of Life on Earth',   author:'Explorium Press',  icon:'🦕',  img:'images/covers/life-on-earth.jpg',         file:'books/life-on-earth.txt',         bg:'#1e4010', bglt:'#285218' },
+  ]},
+  { name:'Poetry', icon:'✍️', books:[
+    { title:"A Child's Garden of Verses",   author:'R. L. Stevenson',  icon:'🌸',  img:'images/covers/childs-garden-verses.jpg',  file:'books/childs-garden-verses.txt',  bg:'#5a2060', bglt:'#742878' },
+    { title:'Now We Are Six',               author:'A. A. Milne',      icon:'🐻',  img:'images/covers/now-we-are-six.jpg',        file:'books/now-we-are-six.txt',        bg:'#6a3808', bglt:'#8a5010' },
+    { title:'The Highwayman',               author:'Alfred Noyes',     icon:'🌙',  img:'images/covers/the-highwayman.jpg',        file:'books/the-highwayman.txt',        bg:'#141428', bglt:'#1e1e38' },
+  ]},
+];
+
+/* ── RENDER SHELVES ── */
+const wrap = document.getElementById('shelvesWrap');
+
+genres.forEach(genre => {
+  const sec = document.createElement('div');
+  sec.className = 'genre-section';
+
+  const header = document.createElement('div');
+  header.className = 'genre-header';
+  header.innerHTML = `
+    <span class="genre-badge">${genre.icon} ${genre.name}</span>
+    <span class="genre-count">${genre.books.length} book${genre.books.length>1?'s':''}</span>`;
+  sec.appendChild(header);
+
+  const grid = document.createElement('div');
+  grid.className = 'covers-grid';
+
+  genre.books.forEach(book => {
+    const card = document.createElement('div');
+    card.className = 'book-card';
+    card.onclick = () => loadBook(book);
+
+    const hasImg = book.img && book.img !== '';
+    card.innerHTML = `
+      <div class="cover-wrap">
+        ${hasImg
+          ? `<img class="cover-img" src="${book.img}" alt="${book.title}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <div class="cover-ph" style="display:none;--c:${book.bg};--c-lt:${book.bglt}">
+               <span class="ph-icon">${book.icon}</span>
+               <span class="ph-title">${book.title}</span>
+               <span class="ph-author">${book.author}</span>
+               <span class="ph-hint">${book.img}</span>
+             </div>`
+          : `<div class="cover-ph" style="--c:${book.bg};--c-lt:${book.bglt}">
+               <span class="ph-icon">${book.icon}</span>
+               <span class="ph-title">${book.title}</span>
+               <span class="ph-author">${book.author}</span>
+               <span class="ph-hint">${book.img || book.file}</span>
+             </div>`
+        }
+      </div>
+      <span class="book-label">${book.title}</span>`;
+    grid.appendChild(card);
+  });
+
+  sec.appendChild(grid);
+  wrap.appendChild(sec);
+});
+
+/* ── BOOK LOADING ── */
+let currentBook   = null;
+let pages         = [];
+let currentSpread = 0;
+
+function loadBook(book) {
+  document.getElementById('loadingMsg').classList.add('show');
+
+  fetch(book.file)
+    .then(r => { if (!r.ok) throw new Error('missing'); return r.text(); })
+    .then(text => {
+      pages = paginateText(stripGutenberg(text), WORDS_PER_PAGE);
+      currentBook   = book;
+      currentSpread = 0;
+      document.getElementById('loadingMsg').classList.remove('show');
+      openBookUI();
+    })
+    .catch(() => {
+      // book txt not added yet — show helpful instructions
+      pages = [
+        `<p><em>This book hasn't been added to the library yet.</em></p>
+         <p>To add it:</p>
+         <p><strong>1.</strong> Go to <strong>gutenberg.org</strong></p>
+         <p><strong>2.</strong> Search for "<strong>${book.title}</strong>"</p>
+         <p><strong>3.</strong> Download the Plain Text UTF-8 file</p>
+         <p><strong>4.</strong> Save it as <strong>${book.file}</strong></p>`
+      ];
+      currentBook   = book;
+      currentSpread = 0;
+      document.getElementById('loadingMsg').classList.remove('show');
+      openBookUI();
+    });
+}
+
+function stripGutenberg(text) {
+  let t = text.replace(/^[\s\S]*?\*\*\* START OF [^\n]*\n/i, '');
+  t = t.replace(/\*\*\* END OF[\s\S]*/i, '');
+  t = t.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  return t;
+}
+
+function paginateText(text, wpp) {
+  const paras = text.split(/\n\n+/).map(p => p.trim()).filter(p => p.length > 20);
+  const result = [];
+  let current = [], wc = 0;
+  paras.forEach(para => {
+    const w = para.split(/\s+/).length;
+    if (wc + w > wpp && current.length) {
+      result.push(current.map(p => `<p>${p}</p>`).join(''));
+      current = []; wc = 0;
+    }
+    current.push(para); wc += w;
+  });
+  if (current.length) result.push(current.map(p => `<p>${p}</p>`).join(''));
+  return result;
+}
+
+/* ── BOOK UI ── */
+function openBookUI() {
+  renderSpread();
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('openBook').classList.add('opened'), 40);
+}
+
+function renderSpread() {
+  const b   = currentBook;
+  const tot = pages.length;
+  const L   = document.getElementById('pageL');
+  const R   = document.getElementById('pageR');
+  const hasImg = b.img && b.img !== '';
+
+  if (currentSpread === 0) {
+    L.innerHTML = `
+      <div class="title-pg">
+        ${hasImg
+          ? `<img class="t-cover" src="${b.img}" alt="${b.title}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <div class="t-cover-ph" style="background:linear-gradient(160deg,${b.bglt},${b.bg});display:none">${b.icon}</div>`
+          : `<div class="t-cover-ph" style="background:linear-gradient(160deg,${b.bglt},${b.bg})">${b.icon}</div>`
+        }
+        <h2>${b.title}</h2>
+        <p class="t-author">by ${b.author}</p>
+        <button class="t-start" onclick="turnPage(1)">Begin Reading →</button>
+      </div>`;
+
+    R.innerHTML = `
+      <div class="page-num">Page 1</div>
+      <div class="page-text">${pages[0] || '<p><em>No content yet.</em></p>'}</div>
+      <div class="page-controls">
+        <button class="pg-btn" disabled>← Previous</button>
+        <span class="pg-ind">Page 1 of ${tot}</span>
+        <button class="pg-btn" onclick="turnPage(1)" ${tot<=1?'disabled':''}>Next →</button>
+      </div>`;
+  } else {
+    const lp = (currentSpread * 2) - 1;
+    const rp = currentSpread * 2;
+    L.innerHTML = `
+      <div class="page-num">Page ${lp + 1}</div>
+      <div class="page-text">${pages[lp] || ''}</div>`;
+    R.innerHTML = `
+      <div class="page-num">${rp < tot ? `Page ${rp + 1}` : 'The End'}</div>
+      <div class="page-text">${pages[rp] || '<p><em>The End.</em></p>'}</div>
+      <div class="page-controls">
+        <button class="pg-btn" onclick="turnPage(-1)">← Previous</button>
+        <span class="pg-ind">Page ${lp + 1} of ${tot}</span>
+        <button class="pg-btn" onclick="turnPage(1)" ${rp >= tot - 1 ? 'disabled':''}>Next →</button>
+      </div>`;
+  }
+}
+
+function turnPage(dir) {
+  const maxSpread = Math.ceil(pages.length / 2);
+  const next = currentSpread + dir;
+  if (next < 0 || next > maxSpread) return;
+  const ob = document.getElementById('openBook');
+  ob.classList.add('turning');
+  ob.addEventListener('animationend', () => ob.classList.remove('turning'), { once:true });
+  currentSpread = next;
+  renderSpread();
+}
+
+function closeBook() {
+  const ob = document.getElementById('openBook');
+  ob.classList.remove('opened');
+  setTimeout(() => document.getElementById('overlay').classList.remove('open'), 350);
+}
+
+document.getElementById('overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeBook();
+});
+</script>
+</body>
+</html>
