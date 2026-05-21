@@ -3,357 +3,362 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Explorium</title>
-<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<title>Explorium — Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink:       #1c1408;
-    --parchment: #f4edd8;
-    --warm:      #ece2c4;
-    --cream:     #faf5e8;
-    --border:    #d0bfa0;
-    --gold:      #b8832e;
-    --gold-lt:   #d4a84e;
-    --leather:   #7a3a10;
-    --muted:     #8a7a5a;
-    --shadow:    rgba(28,20,8,0.10);
-
-    --wiki:    #7a3a10;
-    --library: #2a5224;
-    --games:   #7a1818;
-    --atlas:   #18285a;
-    --learn:   #4a1848;
-    --explore: #145050;
+    --ink:      #1c1408;
+    --parchment:#f4edd8;
+    --warm:     #ece2c4;
+    --cream:    #faf5e8;
+    --border:   #d0bfa0;
+    --gold:     #b8832e;
+    --forest:   #2a5224;
+    --muted:    #8a7a5a;
+    --shadow:   rgba(28,20,8,0.18);
+    --wood:     #140a04;
+    --wood-mid: #1e0e06;
+    --wood-lt:  #2c1608;
+    --brass:    #9a7228;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
-    font-family: 'Andika', sans-serif;
-    background: var(--parchment);
-    color: var(--ink);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    font-family:'Andika', sans-serif;
+    background:var(--wood);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex; flex-direction:column;
   }
 
   body::after {
     content:''; position:fixed; inset:0; pointer-events:none; z-index:900;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.032'/%3E%3C/svg%3E");
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
   }
 
   /* ── HEADER ── */
   header {
-    background: var(--ink);
-    padding: 13px 32px 10px;
-    display: flex; align-items: center; justify-content: space-between;
-    position: relative; flex-shrink: 0;
+    background:var(--ink);
+    padding:13px 32px 10px;
+    display:flex; align-items:center; justify-content:space-between;
+    position:relative; flex-shrink:0; z-index:100;
   }
   header::after {
     content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
-    background: linear-gradient(90deg, #7a1818, #b8832e, #2a5224, #b8832e, #7a1818);
+    background:linear-gradient(90deg,#1a3a14,#3a7a2a,#1a3a14);
   }
-
   .logo { display:flex; align-items:center; gap:9px; text-decoration:none; }
   .logo-seal {
-    width:36px; height:36px; border-radius:50%;
-    background: var(--gold);
+    width:34px; height:34px; border-radius:50%;
+    background:var(--forest);
     display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 0 0 2px rgba(184,131,46,0.3);
-    flex-shrink:0;
+    box-shadow:0 0 0 2px rgba(42,82,36,0.4); flex-shrink:0;
   }
-  .logo-seal svg { width:20px; height:20px; }
+  .logo-seal svg { width:18px; height:18px; }
   .logo-name {
     font-family:'Playfair Display', serif;
-    font-size:1.4rem; font-weight:900;
-    color:var(--parchment); letter-spacing:-0.01em;
+    font-size:1.3rem; font-weight:900; color:var(--parchment);
   }
-  .logo-name em { color:var(--gold-lt); font-style:normal; }
+  .logo-name em { color:#6aaa5a; font-style:normal; }
   .logo-sub {
     display:block; font-family:'JetBrains Mono', monospace;
-    font-size:0.52rem; color:#4a3820;
+    font-size:0.52rem; color:#3a4a30;
     letter-spacing:0.16em; text-transform:uppercase; margin-top:1px;
   }
-
-  .header-right { display:flex; align-items:center; gap:16px; }
-  .hdate { font-size:0.72rem; font-style:italic; color:#4a3820; }
-  .offline {
-    display:flex; align-items:center; gap:4px;
+  .breadcrumb {
+    display:flex; align-items:center; gap:8px;
     font-family:'JetBrains Mono', monospace;
-    font-size:0.55rem; color:#3a6030;
-    letter-spacing:0.1em; text-transform:uppercase;
+    font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase;
   }
-  .odot {
-    width:5px; height:5px; border-radius:50%; background:#4a9a38;
-    animation: blink 2.8s infinite;
+  .breadcrumb a { color:#4a6a3a; text-decoration:none; }
+  .breadcrumb a:hover { color:#6aaa5a; }
+  .breadcrumb .sep { color:#2a4020; }
+  .breadcrumb .cur { color:#6aaa5a; }
+  .back-btn {
+    display:flex; align-items:center; gap:6px;
+    background:rgba(42,82,36,0.2); border:1px solid rgba(42,82,36,0.4);
+    border-radius:3px; padding:5px 12px;
+    font-size:0.72rem; color:#6aaa5a;
+    text-decoration:none; transition:background 0.2s;
   }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .back-btn:hover { background:rgba(42,82,36,0.35); }
 
-  /* ── GREETING ── */
-  .greeting-bar {
-    text-align:center; padding:16px 20px 14px;
-    border-bottom:1px solid var(--border);
-    background: var(--warm);
+  /* ── LIB TITLE ── */
+  .lib-title {
+    background:linear-gradient(180deg,var(--wood-lt),var(--wood-mid));
+    border-bottom:2px solid #080402;
+    padding:14px 32px;
+    display:flex; align-items:center; gap:12px;
   }
-  .greeting-bar h1 {
+  .lib-title h1 {
     font-family:'Playfair Display', serif;
-    font-size:1.1rem; font-weight:700; color:var(--ink);
+    font-size:1.1rem; font-weight:900; color:var(--parchment);
+  }
+  .lib-title p { font-size:0.73rem; font-style:italic; color:#5a3a18; margin-top:2px; }
+
+  /* ── SHELVES ── */
+  .shelves-wrap {
+    flex:1; padding:28px 32px 48px;
+    display:flex; flex-direction:column; gap:32px;
+    overflow-y:auto;
   }
 
-  /* ── MAIN ── */
-  main {
-    flex:1; display:flex; flex-direction:column;
-    justify-content:center;
-    padding: 24px 28px 24px;
-    max-width: 860px; margin:0 auto; width:100%;
-    gap: 16px;
+  .genre-header {
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px; padding-bottom:8px;
+    border-bottom:1px solid #2a1208;
+  }
+  .genre-badge {
+    background:var(--brass); color:#140802;
+    font-family:'Playfair Display', serif;
+    font-size:0.8rem; font-weight:700;
+    padding:4px 14px; border-radius:3px;
+    letter-spacing:0.04em;
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+  }
+  .genre-count {
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.56rem; color:#5a3818; letter-spacing:0.1em;
   }
 
-  /* ── 6-DOOR GRID ── */
-  .doors {
-    display:grid;
-    grid-template-columns: repeat(3,1fr);
-    gap:12px;
-  }
+  /* ── COVERS ── */
+  .covers-grid { display:flex; flex-wrap:wrap; gap:18px; }
 
-  .door {
-    background: var(--cream);
-    border:1px solid var(--border);
-    border-radius:6px;
-    padding:20px 14px 16px;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    text-decoration:none; color:inherit;
-    position:relative; overflow:hidden;
-    box-shadow: 0 2px 8px var(--shadow);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s;
-    cursor:pointer;
-    min-height:124px;
-    gap:9px;
-  }
-
-  .door::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:4px;
-    background: var(--c, var(--gold));
-    transform:scaleX(0); transform-origin:left;
+  .book-card {
+    width:100px; cursor:pointer;
+    display:flex; flex-direction:column; gap:7px;
     transition:transform 0.2s ease;
   }
-  .door:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(28,20,8,0.16); border-color:var(--c, var(--gold)); }
-  .door:hover::before { transform:scaleX(1); }
+  .book-card:hover { transform:translateY(-7px); }
+  .book-card:hover .cover-wrap { box-shadow:0 14px 32px rgba(0,0,0,0.65); }
 
-  .door-icon {
-    width:58px; height:58px;
-    display:flex; align-items:center; justify-content:center;
-    background: rgba(0,0,0,0.025);
-    border:1px solid rgba(0,0,0,0.06);
-    border-radius:5px;
-    transition: background 0.18s;
+  .cover-wrap {
+    width:100px; height:140px;
+    border-radius:2px 5px 5px 2px;
+    overflow:hidden; position:relative;
+    box-shadow:3px 4px 14px rgba(0,0,0,0.55), inset -3px 0 8px rgba(0,0,0,0.25);
+    transition:box-shadow 0.2s; flex-shrink:0;
   }
-  .door:hover .door-icon { background: rgba(0,0,0,0.05); }
-  .door-icon svg { width:38px; height:38px; }
+  .cover-wrap::before {
+    content:''; position:absolute;
+    left:0; top:0; bottom:0; width:8px;
+    background:linear-gradient(90deg,rgba(0,0,0,0.45),transparent);
+    z-index:2;
+  }
+  .cover-img { width:100%; height:100%; object-fit:cover; display:block; }
 
-  .door-name {
+  .cover-ph {
+    width:100%; height:100%;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:10px 8px; gap:5px;
+    background:linear-gradient(160deg, var(--c-lt,#6a3a18), var(--c,#3a1a08));
+  }
+  .cover-ph .ph-icon  { font-size:1.8rem; }
+  .cover-ph .ph-title {
     font-family:'Playfair Display', serif;
-    font-size:0.92rem; font-weight:900;
-    color:var(--ink); text-align:center;
+    font-size:0.6rem; font-weight:700;
+    color:rgba(255,255,255,0.9);
+    text-align:center; line-height:1.25;
+    text-shadow:0 1px 3px rgba(0,0,0,0.5);
+  }
+  .cover-ph .ph-author {
+    font-size:0.5rem; color:rgba(255,255,255,0.5);
+    text-align:center; font-style:italic;
+  }
+  .cover-ph .ph-hint {
+    position:absolute; bottom:4px; right:4px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.4rem; color:rgba(255,255,255,0.28);
+    background:rgba(0,0,0,0.3); border-radius:2px; padding:1px 4px; z-index:3;
   }
 
-  .d-wiki    { --c: var(--wiki); }
-  .d-library { --c: var(--library); }
-  .d-games   { --c: var(--games); }
-  .d-atlas   { --c: var(--atlas); }
-  .d-learn   { --c: var(--learn); }
-  .d-explore { --c: var(--explore); }
-
-  /* ── DAILY STRIP ── */
-  .daily {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 12px;
+  .book-label {
+    font-family:'Playfair Display', serif;
+    font-size:0.65rem; font-weight:700;
+    color:var(--parchment); line-height:1.25; text-align:center;
   }
 
-  .daily-card {
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px var(--shadow);
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border);
+  /* ── LOADING ── */
+  .loading-msg {
+    position:fixed; inset:0; z-index:800;
+    background:rgba(6,3,1,0.9);
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:14px;
+    opacity:0; pointer-events:none; transition:opacity 0.2s;
+  }
+  .loading-msg.show { opacity:1; pointer-events:all; }
+  .loading-msg p { font-family:'Playfair Display', serif; font-size:1rem; color:var(--parchment); font-style:italic; }
+  .spinner {
+    width:32px; height:32px; border-radius:50%;
+    border:2px solid rgba(184,131,46,0.2);
+    border-top-color:var(--gold);
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* ── READING OVERLAY ── */
+  .overlay {
+    position:fixed; inset:0; z-index:500;
+    background:rgba(6,3,1,0.93);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.3s; padding:24px;
+  }
+  .overlay.open { opacity:1; pointer-events:all; }
+
+  .open-book {
+    display:flex;
+    width:min(860px,92vw);
+    height:min(570px,84vh);
+    box-shadow:0 24px 70px rgba(0,0,0,0.85);
+    border-radius:3px 8px 8px 3px;
+    transform:scaleX(0); transform-origin:left center;
+    transition:transform 0.45s cubic-bezier(0.34,1.2,0.64,1);
+    position:relative;
+  }
+  .open-book.opened { transform:scaleX(1); }
+
+  .close-btn {
+    position:absolute; top:-16px; right:-16px;
+    width:36px; height:36px;
+    background:var(--ink); border:2px solid #4a3820;
+    border-radius:50%; color:var(--parchment);
+    font-size:1rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    z-index:10; box-shadow:0 3px 10px rgba(0,0,0,0.5);
+    transition:background 0.2s;
+  }
+  .close-btn:hover { background:#3a2010; }
+
+  .page-l, .page-r {
+    flex:1; padding:32px 32px 52px;
+    display:flex; flex-direction:column;
+    position:relative; overflow:hidden;
+  }
+  .page-l {
+    background:linear-gradient(108deg,#ede4cc 0%,#faf5e8 50%,#f5eedc 100%);
+    border-right:2px solid #d4c4a0;
+    border-radius:3px 0 0 3px;
+    box-shadow:inset -6px 0 16px rgba(0,0,0,0.06);
+  }
+  .page-r {
+    background:linear-gradient(72deg,#faf5e8 0%,#f5eedc 60%,#ece2c4 100%);
+    border-radius:0 8px 8px 0;
+  }
+  .page-l::after {
+    content:''; position:absolute; right:0; top:0; bottom:0; width:20px;
+    background:linear-gradient(90deg,transparent,rgba(0,0,0,0.05));
+  }
+  .page-r::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:20px;
+    background:linear-gradient(90deg,rgba(0,0,0,0.05),transparent);
   }
 
-  /* coloured header band per card */
-  .daily-card-head {
-    padding: 8px 14px 7px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
+  /* title page */
+  .title-pg {
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    height:100%; gap:12px; text-align:center;
+  }
+  .title-pg .t-cover {
+    width:80px; height:112px; border-radius:2px 4px 4px 2px;
+    object-fit:cover; box-shadow:3px 4px 14px rgba(0,0,0,0.28);
+  }
+  .title-pg .t-cover-ph {
+    width:80px; height:112px; border-radius:2px 4px 4px 2px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:2.4rem; box-shadow:3px 4px 14px rgba(0,0,0,0.28);
+  }
+  .title-pg h2 {
+    font-family:'Playfair Display', serif;
+    font-size:1.5rem; font-weight:900; color:var(--ink); line-height:1.2;
+  }
+  .title-pg .t-author { font-size:0.85rem; color:var(--muted); font-style:italic; }
+  .title-pg .t-start {
+    margin-top:8px;
+    background:var(--forest); color:white;
+    border:none; border-radius:4px; padding:7px 18px;
+    font-family:'Andika', sans-serif; font-size:0.78rem;
+    cursor:pointer; transition:opacity 0.2s;
+  }
+  .title-pg .t-start:hover { opacity:0.85; }
+
+  /* reading text */
+  .page-num {
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.56rem; color:#c0a870;
+    letter-spacing:0.1em; margin-bottom:10px; text-align:center;
+  }
+  .page-text {
+    font-family:'Playfair Display', serif;
+    font-size:0.94rem; line-height:1.9;
+    color:#2a2010; flex:1; overflow:hidden;
+  }
+  .page-text p { margin-bottom:0.85em; }
+  .page-text p:first-child::first-letter {
+    font-size:3.2em; line-height:0.72;
+    float:left; margin:4px 7px 0 0;
+    color:var(--forest); font-weight:900; font-style:normal;
   }
 
-  .dc-word   .daily-card-head { background: var(--leather); }
-  .dc-hist   .daily-card-head { background: #18285a; }
-  .dc-quiz   .daily-card-head { background: #145050; }
-
-  .daily-head-icon { font-size: 1rem; }
-
-  .daily-head-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(244,237,216,0.8);
-    font-weight: 400;
-  }
-
-  .daily-card-body {
-    background: var(--cream);
-    padding: 14px 14px 14px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  /* Word of the day */
-  .wotd-word {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-weight: 900;
-    color: var(--leather);
-    line-height: 1;
-    font-style: italic;
-  }
-  .wotd-type {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .wotd-def {
-    font-size: 0.8rem;
-    color: var(--ink);
-    line-height: 1.5;
-    border-left: 2px solid var(--gold);
-    padding-left: 8px;
-    margin-top: 4px;
-  }
-
-  /* Today in history */
-  .hist-year {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #18285a;
-    color: var(--parchment);
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    font-weight: 900;
-    border-radius: 4px;
-    padding: 4px 10px;
-    letter-spacing: 0.02em;
-    align-self: flex-start;
-    margin-bottom: 4px;
-  }
-  .hist-fact {
-    font-size: 0.8rem;
-    color: var(--ink);
-    line-height: 1.55;
-  }
-
-  /* Daily challenge */
-  .quiz-q {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--ink);
-    line-height: 1.35;
-    margin-bottom: 6px;
-  }
-  .quiz-reveal {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #145050;
-    color: var(--parchment);
-    border: none;
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-family: 'Andika', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: opacity 0.2s;
-    align-self: flex-start;
-    margin-top: auto;
-  }
-  .quiz-reveal:hover { opacity: 0.85; }
-  .quiz-answer {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #2a5224;
-    display: none;
-    align-items: center;
-    gap: 5px;
-    margin-top: 4px;
-  }
-  .quiz-answer.shown { display: flex; }
-  .quiz-tick {
-    width: 18px; height: 18px;
-    background: #2a5224;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: white;
-    font-size: 0.7rem;
-    flex-shrink: 0;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top:1px solid var(--border);
-    padding:9px 32px;
+  /* controls */
+  .page-controls {
+    position:absolute; bottom:14px; left:0; right:0;
     display:flex; align-items:center; justify-content:space-between;
-    flex-shrink:0;
+    padding:0 22px;
   }
-  footer span { font-size:0.65rem; font-style:italic; color:var(--muted); }
-  footer .fc  { font-family:'JetBrains Mono', monospace; font-style:normal; }
+  .pg-btn {
+    background:none; border:1px solid #d0bfa0;
+    border-radius:3px; padding:5px 13px;
+    font-family:'Andika', sans-serif;
+    font-size:0.72rem; color:#8a7a5a;
+    cursor:pointer; transition:all 0.18s;
+  }
+  .pg-btn:hover:not(:disabled) { background:var(--forest); color:white; border-color:var(--forest); }
+  .pg-btn:disabled { opacity:0.2; cursor:not-allowed; }
+  .pg-ind {
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.58rem; color:#c0a870; letter-spacing:0.08em;
+  }
 
-  /* ── ANIMATIONS ── */
+  @keyframes pturn {
+    0%  { opacity:1; transform:scaleX(1); }
+    40% { opacity:0.5; transform:scaleX(0.97); }
+    100%{ opacity:1; transform:scaleX(1); }
+  }
+  .turning { animation:pturn 0.22s ease; }
+
   @keyframes up {
-    from { opacity:0; transform:translateY(10px); }
+    from { opacity:0; transform:translateY(12px); }
     to   { opacity:1; transform:translateY(0); }
   }
-  .greeting-bar      { animation:up 0.3s ease 0s both; }
-  .door              { animation:up 0.35s ease both; }
-  .door:nth-child(1) { animation-delay:.04s }
-  .door:nth-child(2) { animation-delay:.09s }
-  .door:nth-child(3) { animation-delay:.14s }
-  .door:nth-child(4) { animation-delay:.19s }
-  .door:nth-child(5) { animation-delay:.24s }
-  .door:nth-child(6) { animation-delay:.29s }
-  .daily-card              { animation:up 0.35s ease both; }
-  .daily-card:nth-child(1) { animation-delay:.33s }
-  .daily-card:nth-child(2) { animation-delay:.38s }
-  .daily-card:nth-child(3) { animation-delay:.43s }
+  .genre-section { animation:up 0.4s ease both; }
+  .genre-section:nth-child(1){animation-delay:.05s}
+  .genre-section:nth-child(2){animation-delay:.12s}
+  .genre-section:nth-child(3){animation-delay:.19s}
+  .genre-section:nth-child(4){animation-delay:.26s}
+  .genre-section:nth-child(5){animation-delay:.33s}
+  .genre-section:nth-child(6){animation-delay:.40s}
 
-  /* ── RESPONSIVE ── */
-  @media(max-width:620px){
-    .doors { grid-template-columns:repeat(2,1fr); gap:10px; }
-    .daily { grid-template-columns:1fr; }
-    .hdate { display:none; }
+  @media(max-width:640px){
+    .shelves-wrap { padding:16px; }
+    .open-book { flex-direction:column; height:auto; border-radius:6px; }
+    .page-l { border-right:none; border-bottom:2px solid #d4c4a0; border-radius:6px 6px 0 0; }
+    .page-r { border-radius:0 0 6px 6px; }
     header { padding:11px 16px; }
-    main { padding:16px 16px 16px; }
   }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
-  <a class="logo" href="#">
+  <a class="logo" href="explorium.html">
     <div class="logo-seal">
       <svg viewBox="0 0 24 24" fill="none">
-        <path d="M19 4C19 4 13 6 9 12C7 15 6.5 18 6.5 18L8.5 16C8.5 16 9.5 19 7.5 21C7.5 21 13 20 16 14C19 8 19 4 19 4Z" fill="#1c1408"/>
-        <path d="M6.5 18L4 21" stroke="#1c1408" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M19 4C19 4 13 6 9 12C7 15 6.5 18 6.5 18L8.5 16C8.5 16 9.5 19 7.5 21C7.5 21 13 20 16 14C19 8 19 4 19 4Z" fill="#f4edd8"/>
+        <path d="M6.5 18L4 21" stroke="#f4edd8" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
     </div>
     <div>
@@ -361,254 +366,304 @@
       <span class="logo-sub">Knowledge Portal</span>
     </div>
   </a>
-  <div class="header-right">
-    <span class="hdate" id="hdate"></span>
-    <div class="offline"><div class="odot"></div>Offline · Safe</div>
+  <div class="breadcrumb">
+    <a href="explorium.html">Home</a>
+    <span class="sep">›</span>
+    <span class="cur">Library</span>
   </div>
+  <a class="back-btn" href="explorium.html">← Back</a>
 </header>
 
-<!-- GREETING -->
-<div class="greeting-bar">
-  <h1>Good <span id="tod">day</span> — where would you like to go?</h1>
+<div class="lib-title">
+  <span style="font-size:1.5rem">📚</span>
+  <div>
+    <h1>The Library</h1>
+    <p>Click any cover to open and read · Add image files to replace placeholders</p>
+  </div>
 </div>
 
-<!-- MAIN -->
-<main>
+<div class="shelves-wrap" id="shelvesWrap"></div>
 
-  <!-- 6 DOORS -->
-  <div class="doors">
+<div class="loading-msg" id="loadingMsg">
+  <div class="spinner"></div>
+  <p>Opening book…</p>
+</div>
 
-    <a class="door d-wiki" href="wiki.html">
-      <div class="door-icon">
-        <svg viewBox="0 0 40 40" fill="none">
-          <rect x="4" y="8" width="14" height="20" rx="2" fill="#e8d8b0" stroke="#7a3a10" stroke-width="1.4"/>
-          <rect x="22" y="8" width="14" height="20" rx="2" fill="#faf5e8" stroke="#7a3a10" stroke-width="1.4"/>
-          <line x1="18" y1="8" x2="18" y2="28" stroke="#7a3a10" stroke-width="1.3"/>
-          <line x1="18" y1="28" x2="4"  y2="30" stroke="#7a3a10" stroke-width="1"/>
-          <line x1="18" y1="28" x2="36" y2="30" stroke="#7a3a10" stroke-width="1"/>
-          <line x1="8"  y1="14" x2="14" y2="14" stroke="#7a3a10" stroke-width="1" stroke-linecap="round"/>
-          <line x1="8"  y1="17" x2="14" y2="17" stroke="#7a3a10" stroke-width="1" stroke-linecap="round"/>
-          <line x1="8"  y1="20" x2="12" y2="20" stroke="#7a3a10" stroke-width="1" stroke-linecap="round"/>
-          <line x1="26" y1="14" x2="32" y2="14" stroke="#7a3a10" stroke-width="1" stroke-linecap="round"/>
-          <line x1="26" y1="17" x2="32" y2="17" stroke="#7a3a10" stroke-width="1" stroke-linecap="round"/>
-          <line x1="26" y1="20" x2="30" y2="20" stroke="#7a3a10" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="30" cy="29" r="4.5" fill="none" stroke="#b8832e" stroke-width="1.6"/>
-          <line x1="33.2" y1="32.2" x2="36" y2="35" stroke="#b8832e" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="door-name">Kid Wiki</span>
-    </a>
-
-    <a class="door d-library" href="library.html">
-      <div class="door-icon">
-        <svg viewBox="0 0 40 40" fill="none">
-          <rect x="5"  y="24" width="30" height="8" rx="2" fill="#d4a84e" stroke="#2a5224" stroke-width="1.4"/>
-          <rect x="8"  y="16" width="24" height="8" rx="2" fill="#c8d8b0" stroke="#2a5224" stroke-width="1.4"/>
-          <rect x="11" y="8"  width="18" height="8" rx="2" fill="#faf5e8" stroke="#2a5224" stroke-width="1.4"/>
-          <line x1="9"  y1="24" x2="9"  y2="32" stroke="#2a5224" stroke-width="1.1"/>
-          <line x1="12" y1="16" x2="12" y2="24" stroke="#2a5224" stroke-width="1.1"/>
-          <line x1="15" y1="8"  x2="15" y2="16" stroke="#2a5224" stroke-width="1.1"/>
-        </svg>
-      </div>
-      <span class="door-name">Library</span>
-    </a>
-
-    <a class="door d-games" href="games.html">
-      <div class="door-icon">
-        <svg viewBox="0 0 40 40" fill="none">
-          <rect x="5" y="5" width="16" height="16" rx="3" fill="#faf5e8" stroke="#7a1818" stroke-width="1.4"/>
-          <circle cx="10" cy="10" r="1.8" fill="#7a1818"/>
-          <circle cx="16" cy="10" r="1.8" fill="#7a1818"/>
-          <circle cx="10" cy="16" r="1.8" fill="#7a1818"/>
-          <circle cx="16" cy="16" r="1.8" fill="#7a1818"/>
-          <circle cx="13" cy="13" r="1.8" fill="#7a1818"/>
-          <rect x="21" y="5" width="14" height="14" rx="3" fill="#faf5e8" stroke="#7a1818" stroke-width="1.4"/>
-          <line x1="28" y1="8"  x2="28" y2="16" stroke="#7a1818" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="24" y1="12" x2="32" y2="12" stroke="#7a1818" stroke-width="1.4" stroke-linecap="round"/>
-          <rect x="5" y="23" width="30" height="12" rx="3" fill="#f0e8e8" stroke="#7a1818" stroke-width="1.4"/>
-          <line x1="12" y1="29" x2="18" y2="29" stroke="#7a1818" stroke-width="1.3" stroke-linecap="round"/>
-          <line x1="15" y1="26" x2="15" y2="32" stroke="#7a1818" stroke-width="1.3" stroke-linecap="round"/>
-          <circle cx="26" cy="27" r="1.5" fill="#7a1818"/>
-          <circle cx="30" cy="31" r="1.5" fill="#7a1818"/>
-        </svg>
-      </div>
-      <span class="door-name">Games</span>
-    </a>
-
-    <a class="door d-atlas" href="atlas.html">
-      <div class="door-icon">
-        <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="15" fill="#ddeaf5" stroke="#18285a" stroke-width="1.5"/>
-          <ellipse cx="20" cy="20" rx="7" ry="15" fill="none" stroke="#18285a" stroke-width="1.1"/>
-          <line x1="5" y1="20" x2="35" y2="20" stroke="#18285a" stroke-width="1.1"/>
-          <path d="M7 14 Q20 17 33 14" fill="none" stroke="#18285a" stroke-width="0.9"/>
-          <path d="M7 26 Q20 23 33 26" fill="none" stroke="#18285a" stroke-width="0.9"/>
-          <circle cx="26" cy="16" r="2.5" fill="#b8832e" opacity="0.75"/>
-        </svg>
-      </div>
-      <span class="door-name">Atlas</span>
-    </a>
-
-    <a class="door d-learn" href="learn.html">
-      <div class="door-icon">
-        <svg viewBox="0 0 40 40" fill="none">
-          <path d="M20 6 L36 14 L20 22 L4 14 Z" fill="#e8d8f0" stroke="#4a1848" stroke-width="1.4"/>
-          <path d="M4 14 L4 24 Q12 28 20 24 Q28 20 36 24 L36 14" fill="none" stroke="#4a1848" stroke-width="1.3"/>
-          <path d="M20 22 L20 34" stroke="#4a1848" stroke-width="1.3" stroke-linecap="round"/>
-          <circle cx="20" cy="35" r="2" fill="#4a1848"/>
-          <line x1="36" y1="14" x2="36" y2="28" stroke="#4a1848" stroke-width="1.3" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <span class="door-name">Learn</span>
-    </a>
-
-    <a class="door d-explore" href="explore.html">
-      <div class="door-icon">
-        <svg viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="15" fill="#d0ecec" stroke="#145050" stroke-width="1.5"/>
-          <line x1="20" y1="8"  x2="20" y2="32" stroke="#145050" stroke-width="1.1"/>
-          <line x1="8"  y1="20" x2="32" y2="20" stroke="#145050" stroke-width="1.1"/>
-          <polygon points="20,8 22,16 20,14 18,16" fill="#145050"/>
-          <polygon points="20,32 22,24 20,26 18,24" fill="#145050" opacity="0.4"/>
-          <polygon points="32,20 24,18 26,20 24,22" fill="#145050" opacity="0.4"/>
-          <polygon points="8,20 16,18 14,20 16,22"  fill="#145050" opacity="0.4"/>
-          <circle cx="20" cy="20" r="2.5" fill="#b8832e"/>
-        </svg>
-      </div>
-      <span class="door-name">Explore</span>
-    </a>
-
+<div class="overlay" id="overlay">
+  <div class="open-book" id="openBook">
+    <button class="close-btn" onclick="closeBook()">✕</button>
+    <div class="page-l" id="pageL"></div>
+    <div class="page-r" id="pageR"></div>
   </div>
-
-  <!-- DAILY STRIP — 3 cards -->
-  <div class="daily">
-
-    <!-- Word of the Day -->
-    <div class="daily-card dc-word">
-      <div class="daily-card-head">
-        <span class="daily-head-icon">✍️</span>
-        <span class="daily-head-label">Word of the Day</span>
-      </div>
-      <div class="daily-card-body">
-        <span class="wotd-word" id="wotd-word">Luminous</span>
-        <span class="wotd-type">adjective</span>
-        <p class="wotd-def" id="wotd-def">Giving off a gentle, glowing light.</p>
-      </div>
-    </div>
-
-    <!-- Today in History -->
-    <div class="daily-card dc-hist">
-      <div class="daily-card-head">
-        <span class="daily-head-icon">📅</span>
-        <span class="daily-head-label">Today in History</span>
-      </div>
-      <div class="daily-card-body">
-        <span class="hist-year" id="hist-year">1969</span>
-        <p class="hist-fact" id="hist-fact">Neil Armstrong became the first person to walk on the Moon.</p>
-      </div>
-    </div>
-
-    <!-- Daily Challenge -->
-    <div class="daily-card dc-quiz">
-      <div class="daily-card-head">
-        <span class="daily-head-icon">🧠</span>
-        <span class="daily-head-label">Daily Challenge</span>
-      </div>
-      <div class="daily-card-body">
-        <p class="quiz-q" id="quiz-q">What is the capital city of Australia?</p>
-        <button class="quiz-reveal" id="quiz-btn" onclick="revealAnswer()">Tap to reveal →</button>
-        <div class="quiz-answer" id="quiz-answer">
-          <div class="quiz-tick">✓</div>
-          <span id="quiz-ans-text"></span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-</main>
-
-<!-- FOOTER -->
-<footer>
-  <span>Explorium — a safe, offline learning portal.</span>
-  <span class="fc" id="fclock"></span>
-</footer>
+</div>
 
 <script>
-  const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+/*
+==========================================================
+  BOOK CATALOGUE
+  How to add a book:
+  1. Download plain text from gutenberg.org → save to books/
+  2. Download cover image from openlibrary.org → save to images/covers/
+  3. Add an entry below pointing to those files
+  Leave img:'' if you haven't got the cover image yet —
+  a coloured placeholder will show instead.
+==========================================================
+*/
 
-  function tick() {
-    const n = new Date(), h = n.getHours();
-    document.getElementById('tod').textContent    = h<12?'morning':h<17?'afternoon':'evening';
-    document.getElementById('hdate').textContent  = `${DAYS[n.getDay()]}, ${n.getDate()} ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
-    document.getElementById('fclock').textContent = n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+const WORDS_PER_PAGE = 110;
+
+const genres = [
+  { name:'Adventure', icon:'⚔️', books:[
+    { title:'Treasure Island',              author:'R. L. Stevenson',  icon:'🏴‍☠️', img:'images/covers/treasure-island.jpg',       file:'books/treasure-island.txt',       bg:'#6b2d0e', bglt:'#9a4a1a' },
+    { title:'Robinson Crusoe',              author:'Daniel Defoe',     icon:'🏝️',  img:'images/covers/robinson-crusoe.jpg',        file:'books/robinson-crusoe.txt',       bg:'#1e4a18', bglt:'#2e6a24' },
+    { title:'20,000 Leagues Under the Sea', author:'Jules Verne',      icon:'🐙',  img:'images/covers/20000-leagues.jpg',          file:'books/20000-leagues.txt',         bg:'#18285a', bglt:'#243878' },
+    { title:'Swiss Family Robinson',        author:'Johann Wyss',      icon:'🌴',  img:'images/covers/swiss-family-robinson.jpg',  file:'books/swiss-family-robinson.txt', bg:'#4a2808', bglt:'#6a3a10' },
+    { title:'The Call of the Wild',         author:'Jack London',      icon:'🐺',  img:'images/covers/call-of-the-wild.jpg',       file:'books/call-of-the-wild.txt',      bg:'#1a1a2a', bglt:'#2a2a3a' },
+  ]},
+  { name:'Fairy Tales', icon:'✨', books:[
+    { title:'Alice in Wonderland',          author:'Lewis Carroll',    icon:'🐇',  img:'images/covers/alice-in-wonderland.jpg',    file:'books/alice-in-wonderland.txt',   bg:'#5a1870', bglt:'#7a2890' },
+    { title:"Grimm's Fairy Tales",          author:'Brothers Grimm',   icon:'🐺',  img:'images/covers/grimms-fairy-tales.jpg',     file:'books/grimms-fairy-tales.txt',    bg:'#4a1010', bglt:'#6a1818' },
+    { title:"Aesop's Fables",               author:'Aesop',            icon:'🦊',  img:'images/covers/aesops-fables.jpg',          file:'books/aesops-fables.txt',         bg:'#145050', bglt:'#1e6a6a' },
+    { title:'The Arabian Nights',           author:'Traditional',      icon:'🌙',  img:'images/covers/arabian-nights.jpg',         file:'books/arabian-nights.txt',        bg:'#3a2808', bglt:'#5a3c10' },
+  ]},
+  { name:'Animals', icon:'🦁', books:[
+    { title:'The Jungle Book',              author:'Rudyard Kipling',  icon:'🐆',  img:'images/covers/jungle-book.jpg',            file:'books/jungle-book.txt',           bg:'#1e4a14', bglt:'#2a6018' },
+    { title:'Black Beauty',                 author:'Anna Sewell',      icon:'🐎',  img:'images/covers/black-beauty.jpg',           file:'books/black-beauty.txt',          bg:'#1a1a1a', bglt:'#2e2e2e' },
+    { title:'The Wind in the Willows',      author:'Kenneth Grahame',  icon:'🐸',  img:'images/covers/wind-in-the-willows.jpg',    file:'books/wind-in-the-willows.txt',   bg:'#1e4a14', bglt:'#2a5a18' },
+    { title:'Watership Down',               author:'Richard Adams',    icon:'🐇',  img:'images/covers/watership-down.jpg',         file:'books/watership-down.txt',        bg:'#4a2808', bglt:'#6a3810' },
+  ]},
+  { name:'History', icon:'🏛️', books:[
+    { title:'Tales of Ancient Egypt',       author:'Roger L. Green',   icon:'🐪',  img:'images/covers/tales-ancient-egypt.jpg',   file:'books/tales-ancient-egypt.txt',   bg:'#8a5a08', bglt:'#aa7818' },
+    { title:'Stories of King Arthur',       author:'Howard Pyle',      icon:'👑',  img:'images/covers/king-arthur.jpg',           file:'books/king-arthur.txt',           bg:'#18285a', bglt:'#243070' },
+    { title:'The Iliad Retold',             author:'Alfred J. Church', icon:'⚔️',  img:'images/covers/the-iliad.jpg',             file:'books/the-iliad.txt',             bg:'#7a1818', bglt:'#982222' },
+  ]},
+  { name:'Science', icon:'🔬', books:[
+    { title:'The Wonders of the Universe',  author:'Explorium Press',  icon:'🚀',  img:'images/covers/wonders-universe.jpg',      file:'books/wonders-universe.txt',      bg:'#0a0a2a', bglt:'#14143a' },
+    { title:'How Things Work',              author:'Explorium Press',  icon:'⚙️',  img:'images/covers/how-things-work.jpg',       file:'books/how-things-work.txt',       bg:'#1a2a3a', bglt:'#243444' },
+    { title:'The Story of Life on Earth',   author:'Explorium Press',  icon:'🦕',  img:'images/covers/life-on-earth.jpg',         file:'books/life-on-earth.txt',         bg:'#1e4010', bglt:'#285218' },
+  ]},
+  { name:'Poetry', icon:'✍️', books:[
+    { title:"A Child's Garden of Verses",   author:'R. L. Stevenson',  icon:'🌸',  img:'images/covers/childs-garden-verses.jpg',  file:'books/childs-garden-verses.txt',  bg:'#5a2060', bglt:'#742878' },
+    { title:'Now We Are Six',               author:'A. A. Milne',      icon:'🐻',  img:'images/covers/now-we-are-six.jpg',        file:'books/now-we-are-six.txt',        bg:'#6a3808', bglt:'#8a5010' },
+    { title:'The Highwayman',               author:'Alfred Noyes',     icon:'🌙',  img:'images/covers/the-highwayman.jpg',        file:'books/the-highwayman.txt',        bg:'#141428', bglt:'#1e1e38' },
+  ]},
+];
+
+/* ── RENDER SHELVES ── */
+const wrap = document.getElementById('shelvesWrap');
+
+genres.forEach(genre => {
+  const sec = document.createElement('div');
+  sec.className = 'genre-section';
+
+  const header = document.createElement('div');
+  header.className = 'genre-header';
+  header.innerHTML = `
+    <span class="genre-badge">${genre.icon} ${genre.name}</span>
+    <span class="genre-count">${genre.books.length} book${genre.books.length>1?'s':''}</span>`;
+  sec.appendChild(header);
+
+  const grid = document.createElement('div');
+  grid.className = 'covers-grid';
+
+  genre.books.forEach(book => {
+    const card = document.createElement('div');
+    card.className = 'book-card';
+    card.onclick = () => loadBook(book);
+
+    const hasImg = book.img && book.img !== '';
+    card.innerHTML = `
+      <div class="cover-wrap">
+        ${hasImg
+          ? `<img class="cover-img" src="${book.img}" alt="${book.title}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <div class="cover-ph" style="display:none;--c:${book.bg};--c-lt:${book.bglt}">
+               <span class="ph-icon">${book.icon}</span>
+               <span class="ph-title">${book.title}</span>
+               <span class="ph-author">${book.author}</span>
+               <span class="ph-hint">${book.img}</span>
+             </div>`
+          : `<div class="cover-ph" style="--c:${book.bg};--c-lt:${book.bglt}">
+               <span class="ph-icon">${book.icon}</span>
+               <span class="ph-title">${book.title}</span>
+               <span class="ph-author">${book.author}</span>
+               <span class="ph-hint">${book.img || book.file}</span>
+             </div>`
+        }
+      </div>
+      <span class="book-label">${book.title}</span>`;
+    grid.appendChild(card);
+  });
+
+  sec.appendChild(grid);
+  wrap.appendChild(sec);
+});
+
+/* ── BOOK LOADING ── */
+let currentBook   = null;
+let pages         = [];
+let currentSpread = 0;
+
+function loadBook(book) {
+  document.getElementById('loadingMsg').classList.add('show');
+
+  fetch(book.file)
+    .then(r => { if (!r.ok) throw new Error('missing'); return r.text(); })
+    .then(text => {
+      pages = paginateText(stripGutenberg(text), WORDS_PER_PAGE);
+      currentBook   = book;
+      currentSpread = 0;
+      document.getElementById('loadingMsg').classList.remove('show');
+      openBookUI();
+    })
+    .catch(() => {
+      // book txt not added yet — show helpful instructions
+      pages = [
+        `<p><em>This book hasn't been added to the library yet.</em></p>
+         <p>To add it:</p>
+         <p><strong>1.</strong> Go to <strong>gutenberg.org</strong></p>
+         <p><strong>2.</strong> Search for "<strong>${book.title}</strong>"</p>
+         <p><strong>3.</strong> Download the Plain Text UTF-8 file</p>
+         <p><strong>4.</strong> Save it as <strong>${book.file}</strong></p>`
+      ];
+      currentBook   = book;
+      currentSpread = 0;
+      document.getElementById('loadingMsg').classList.remove('show');
+      openBookUI();
+    });
+}
+
+function stripGutenberg(text) {
+  // normalise line endings
+  let t = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  // strip everything before *** START OF
+  t = t.replace(/^[\s\S]*?\*\*\* START OF [^\n]*\n/i, '');
+
+  // strip everything after *** END OF
+  t = t.replace(/\*\*\* END OF[\s\S]*/i, '');
+
+  // remove table of contents — lines with lots of dots and page numbers
+  t = t.replace(/^[^\n]*\.{4,}[^\n]*$/gm, '');
+
+  // remove lines that are pure chapter headings in ALL CAPS with roman numerals
+  // e.g. "CHAPTER I", "PART ONE", "XXIII. THE BLACK SPOT"
+  t = t.replace(/^[ \t]*(CHAPTER|PART|BOOK|SECTION|VOLUME)[ \t]+[IVXLCDM\d]+[^\n]*$/gim, '');
+
+  // remove lines that are just roman numerals or numbers on their own
+  t = t.replace(/^[ \t]*[IVXLCDM]+\.?[ \t]*$/gm, '');
+
+  // remove illustration/figure notes
+  t = t.replace(/^\[.*?(illustration|figure|image|plate).*?\]$/gim, '');
+
+  // collapse 3+ blank lines to 2
+  t = t.replace(/\n{3,}/g, '\n\n');
+
+  return t.trim();
+}
+
+function paginateText(text, wpp) {
+  // split into paragraphs
+  const paras = text.split(/\n\n+/)
+    .map(p => p.replace(/\n/g, ' ').trim())  // flatten single newlines within paragraphs
+    .filter(p => p.length > 15);             // skip very short lines (leftover headers etc)
+
+  const result = [];
+  let current = [], wc = 0;
+
+  paras.forEach(para => {
+    const w = para.split(/\s+/).length;
+
+    // if adding this paragraph would overflow the page, save current and start new
+    if (wc + w > wpp && current.length > 0) {
+      result.push(current.map(p => `<p>${p}</p>`).join(''));
+      current = [];
+      wc = 0;
+    }
+
+    current.push(para);
+    wc += w;
+  });
+
+  // push any remaining
+  if (current.length) result.push(current.map(p => `<p>${p}</p>`).join(''));
+
+  return result;
+}
+
+/* ── BOOK UI ── */
+function openBookUI() {
+  renderSpread();
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('openBook').classList.add('opened'), 40);
+}
+
+function renderSpread() {
+  const b   = currentBook;
+  const tot = pages.length;
+  const L   = document.getElementById('pageL');
+  const R   = document.getElementById('pageR');
+  const hasImg = b.img && b.img !== '';
+
+  if (currentSpread === 0) {
+    L.innerHTML = `
+      <div class="title-pg">
+        ${hasImg
+          ? `<img class="t-cover" src="${b.img}" alt="${b.title}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <div class="t-cover-ph" style="background:linear-gradient(160deg,${b.bglt},${b.bg});display:none">${b.icon}</div>`
+          : `<div class="t-cover-ph" style="background:linear-gradient(160deg,${b.bglt},${b.bg})">${b.icon}</div>`
+        }
+        <h2>${b.title}</h2>
+        <p class="t-author">by ${b.author}</p>
+        <button class="t-start" onclick="turnPage(1)">Begin Reading →</button>
+      </div>`;
+
+    R.innerHTML = `
+      <div class="page-num">Page 1</div>
+      <div class="page-text">${pages[0] || '<p><em>No content yet.</em></p>'}</div>
+      <div class="page-controls">
+        <button class="pg-btn" disabled>← Previous</button>
+        <span class="pg-ind">Page 1 of ${tot}</span>
+        <button class="pg-btn" onclick="turnPage(1)" ${tot<=1?'disabled':''}>Next →</button>
+      </div>`;
+  } else {
+    const lp = (currentSpread * 2) - 1;
+    const rp = currentSpread * 2;
+    L.innerHTML = `
+      <div class="page-num">Page ${lp + 1}</div>
+      <div class="page-text">${pages[lp] || ''}</div>`;
+    R.innerHTML = `
+      <div class="page-num">${rp < tot ? `Page ${rp + 1}` : 'The End'}</div>
+      <div class="page-text">${pages[rp] || '<p><em>The End.</em></p>'}</div>
+      <div class="page-controls">
+        <button class="pg-btn" onclick="turnPage(-1)">← Previous</button>
+        <span class="pg-ind">Page ${lp + 1} of ${tot}</span>
+        <button class="pg-btn" onclick="turnPage(1)" ${rp >= tot - 1 ? 'disabled':''}>Next →</button>
+      </div>`;
   }
-  tick(); setInterval(tick, 20000);
+}
 
-  const words = [
-    { word:'Luminous',     type:'adjective', def:'Giving off a gentle, glowing light.' },
-    { word:'Ancient',      type:'adjective', def:'Very, very old — from a long, long time ago.' },
-    { word:'Hibernate',    type:'verb',      def:'To sleep deeply all through winter, like a bear.' },
-    { word:'Horizon',      type:'noun',      def:'The line where the sky seems to meet the land or sea.' },
-    { word:'Migrate',      type:'verb',      def:'To travel a long distance to find a new home.' },
-    { word:'Transparent',  type:'adjective', def:'So clear you can see right through it, like glass.' },
-    { word:'Vast',         type:'adjective', def:'Enormous — stretching further than the eye can see.' },
-    { word:'Curious',      type:'adjective', def:'Wanting to know and learn about everything.' },
-    { word:'Nocturnal',    type:'adjective', def:'Active at night and asleep during the day.' },
-    { word:'Erupt',        type:'verb',      def:'To burst out suddenly with great force, like a volcano.' },
-    { word:'Gravity',      type:'noun',      def:'The invisible force that pulls things down to Earth.' },
-    { word:'Fossil',       type:'noun',      def:'The remains of a plant or animal preserved in rock for millions of years.' },
-  ];
+function turnPage(dir) {
+  const maxSpread = Math.ceil(pages.length / 2);
+  const next = currentSpread + dir;
+  if (next < 0 || next > maxSpread) return;
+  const ob = document.getElementById('openBook');
+  ob.classList.add('turning');
+  ob.addEventListener('animationend', () => ob.classList.remove('turning'), { once:true });
+  currentSpread = next;
+  renderSpread();
+}
 
-  const history = [
-    { year:'1969', fact:'Neil Armstrong became the first person ever to walk on the Moon.' },
-    { year:'1903', fact:'The Wright brothers made the very first powered aeroplane flight — it lasted 12 seconds.' },
-    { year:'1953', fact:'Edmund Hillary and Tenzing Norgay became the first people to reach the top of Mount Everest.' },
-    { year:'1928', fact:'Alexander Fleming discovered penicillin, saving hundreds of millions of lives.' },
-    { year:'1879', fact:'Thomas Edison demonstrated his electric light bulb to the public for the very first time.' },
-    { year:'1912', fact:'The Titanic sank in the North Atlantic Ocean on her very first voyage.' },
-    { year:'1492', fact:'Christopher Columbus first arrived in the Americas, changing history forever.' },
-    { year:'1687', fact:'Isaac Newton published his laws of gravity, explaining why things fall.' },
-    { year:'1665', fact:'The Great Plague swept through London, killing nearly 100,000 people.' },
-    { year:'1789', fact:'The French Revolution began, changing how people thought about power and freedom.' },
-    { year:'1066', fact:'William the Conqueror won the Battle of Hastings and became King of England.' },
-    { year:'1955', fact:'Rosa Parks refused to give up her seat on a bus, sparking the civil rights movement.' },
-  ];
+function closeBook() {
+  const ob = document.getElementById('openBook');
+  ob.classList.remove('opened');
+  setTimeout(() => document.getElementById('overlay').classList.remove('open'), 350);
+}
 
-  const challenges = [
-    { q:'What is the capital city of Australia?',               a:'Canberra' },
-    { q:'How many sides does a hexagon have?',                  a:'Six (6)' },
-    { q:'What gas do plants take in to make their food?',       a:'Carbon dioxide' },
-    { q:'Which planet is closest to the Sun?',                  a:'Mercury' },
-    { q:'What is 8 × 7?',                                       a:'56' },
-    { q:'What is the longest river in the world?',              a:'The Nile' },
-    { q:'How many bones are in the human body?',                a:'206' },
-    { q:'What is the smallest country in the world?',           a:'Vatican City' },
-    { q:'Which animal is the fastest on land?',                 a:'The cheetah' },
-    { q:'How many planets are in our Solar System?',            a:'Eight (8)' },
-    { q:'What language did the ancient Romans speak?',          a:'Latin' },
-    { q:'What is H₂O more commonly known as?',                 a:'Water' },
-  ];
-
-  const doy = Math.floor((new Date() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-  const w = words[doy % words.length];
-  const h = history[doy % history.length];
-  const c = challenges[doy % challenges.length];
-
-  document.getElementById('wotd-word').textContent = w.word;
-  document.getElementById('wotd-def').textContent  = w.def;
-  document.querySelector('.wotd-type').textContent  = w.type;
-  document.getElementById('hist-year').textContent  = h.year;
-  document.getElementById('hist-fact').textContent  = h.fact;
-  document.getElementById('quiz-q').textContent     = c.q;
-  document.getElementById('quiz-ans-text').textContent = c.a;
-
-  function revealAnswer() {
-    document.getElementById('quiz-btn').style.display    = 'none';
-    document.getElementById('quiz-answer').classList.add('shown');
-  }
+document.getElementById('overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeBook();
+});
 </script>
-
 </body>
 </html>
